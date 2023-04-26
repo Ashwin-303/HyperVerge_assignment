@@ -45,4 +45,10 @@ dependencies {
 inputs = {
   vpc_id         = dependency.vpc.outputs.vpc_id
   public_subnets = dependency.vpc.outputs.public_subnets
+
+
+
+  image_id = "ami-007855ac798b5175e"
+  instance_type = "t3.nano"
+  key_name = "mb-laptop"  
 }

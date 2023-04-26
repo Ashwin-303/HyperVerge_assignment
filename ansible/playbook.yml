@@ -1,41 +1,47 @@
 ---
 - hosts: all
+  serial: 1
   become: yes
-  connection: local
+
+  # vars_prompt:
+  # - name: access_key
+  #   prompt: Enter the Access key 
+  # - name: secret_key
+  #   prompt: Enter the Secret key 
+
   vars:
     ansible_python_interpreter: auto
     server_name: "{{ ansible_default_ipv4.address }}"
+    instance_id: "{{ hostvars[inventory_hostname]['instance_id'] }}"
+    mac_address: "{{ hostvars[inventory_hostname]['network_interfaces'][0].mac_address }}"
+    public_ip: "{{ hostvars[inventory_hostname]['public_ip_address'] }}"
     document_root: /var/www
-    app_root: html_demo_site-main
+    app_root: site
   tasks:
-    - name: Update apt cache and install Nginx
-      apt:
-        name: nginx
-        state: latest
-        update_cache: yes
+
+    # - name: Update apt cache and install Nginx
+    #   apt:
+    #     name: nginx
+    #     state: latest
+    #     update_cache: yes
 
     - name: Apply Index.html template
       template:
         src: files/index.html.j2
-        dest: "{{ app_root }}/index.html"
+        dest: "{{ document_root }}/index.html"
       notify: Restart Nginx        
 
-    - name: Copy website files to the server's document root
-      copy:
-        src: "{{ app_root }}"
-        dest: "{{ document_root }}"
-        mode: preserve
+    # - name: Copy website files to the server's document root
+    #   copy:
+    #     src: "{{ app_root }}"
+    #     dest: "{{ document_root }}"
+    #     mode: preserve
 
     - name: Apply Nginx template
       template:
         src: files/nginx.conf.j2
         dest: /etc/nginx/sites-available/default
       notify: Restart Nginx
-
-    - name: print facts
-      debug:
-        msg: "IPv4 address: {{ ansible_default_ipv4.address }},
-              MAC address: {{ ansible_default_ipv4.macaddress }}"
 
     - name: Enable new site
       file:

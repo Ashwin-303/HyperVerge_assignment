@@ -1,0 +1,13 @@
+---
+plugin: aws_ec2
+regions:
+  - "us-east-1"
+
+keyed_groups:
+  - key: tags.Name
+  - key: tags.Environment
+filters:
+  instance-state-name : running  
+
+hostnames:
+  - network-interface.association.public-ip

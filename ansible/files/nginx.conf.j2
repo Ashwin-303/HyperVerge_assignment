@@ -1,10 +1,10 @@
 server {
   listen 80;
 
-  root {{ document_root }}/{{ app_root }};
+  root {{ document_root }};
   index index.html index.htm;
 
-  server_name {{ server_name }};
+  server_name {{ public_ip }};
   
   location / {
    default_type "text/html";

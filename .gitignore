@@ -3,6 +3,7 @@
 
 ### Terraform ###
 # Local .terraform directories
+secret.yml
 **/.terraform/*
 
 # .tfstate files

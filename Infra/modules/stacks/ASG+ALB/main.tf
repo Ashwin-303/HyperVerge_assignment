@@ -9,6 +9,13 @@ resource "aws_security_group" "allow_http" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 
   egress {
     from_port       = 0
@@ -34,8 +41,13 @@ resource "aws_launch_configuration" "web" {
 
   user_data = <<USER_DATA
 #!/bin/bash
-yum update
-yum -y install ncdu
+apt update
+apt -y install nginx
+apt install python3 -y
+apt install python3-pip -y
+echo "$(curl http://169.254.169.254/latest/meta-data/local-ipv4)" > /usr/share/nginx/html/index.html
+chkconfig nginx on
+service nginx start
   USER_DATA
 
   lifecycle {
@@ -96,7 +108,7 @@ resource "aws_elb" "web_elb" {
 resource "aws_autoscaling_group" "web" {
   name = "${aws_launch_configuration.web.name}-asg"
 
-  min_size             = 1
+  min_size             = 2
   desired_capacity     = 2
   max_size             = 4
   
