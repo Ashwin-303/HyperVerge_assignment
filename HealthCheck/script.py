@@ -1,6 +1,6 @@
 import requests
 
-url = 'http://localhost'
+url = 'https://google.com'
 
 try:
     response = requests.get(url)

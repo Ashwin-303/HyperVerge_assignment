@@ -25,39 +25,63 @@
     #     state: latest
     #     update_cache: yes
 
-    - name: Apply Index.html template
-      template:
-        src: files/index.html.j2
-        dest: "{{ document_root }}/index.html"
-      notify: Restart Nginx        
+    # - name: Apply Index.html template
+    #   template:
+    #     src: files/index.html.j2
+    #     dest: "{{ document_root }}/index.html"
+    #   notify: Restart Nginx        
 
-    # - name: Copy website files to the server's document root
+    # # - name: Copy website files to the server's document root
+    # #   copy:
+    # #     src: "{{ app_root }}"
+    # #     dest: "{{ document_root }}"
+    # #     mode: preserve
+
+    # - name: Apply Nginx template
+    #   template:
+    #     src: files/nginx.conf.j2
+    #     dest: /etc/nginx/sites-available/default
+    #   notify: Restart Nginx
+
+    # - name: Enable new site
+    #   file:
+    #     src: /etc/nginx/sites-available/default
+    #     dest: /etc/nginx/sites-enabled/default
+    #     state: link
+    #   notify: Restart Nginx
+
+    # - name: Allow all access to tcp port 80
+    #   ufw:
+    #     rule: allow
+    #     port: '80'
+    #     proto: tcp
+
+    # - name: Copy python script
     #   copy:
-    #     src: "{{ app_root }}"
-    #     dest: "{{ document_root }}"
-    #     mode: preserve
+    #     src: "../HealthCheck/script2.py"
+    #     dest: "/tmp/script2.py"
+    #     mode: preserve    
 
-    - name: Apply Nginx template
-      template:
-        src: files/nginx.conf.j2
-        dest: /etc/nginx/sites-available/default
-      notify: Restart Nginx
+    # - name: install dependencies
+    #   shell: pip install requests slack_sdk             
 
-    - name: Enable new site
-      file:
-        src: /etc/nginx/sites-available/default
-        dest: /etc/nginx/sites-enabled/default
-        state: link
-      notify: Restart Nginx
+    # - name: Apply urls.txt template
+    #   template:
+    #     src: files/urls.txt.j2
+    #     dest: "/tmp/urls.txt"
+    #   notify: Restart Nginx   
 
-    - name: Allow all access to tcp port 80
-      ufw:
-        rule: allow
-        port: '80'
-        proto: tcp
+    - name: Start HealthCheck Script
+      shell: nohup python3 script2.py &
+      args:
+        chdir: /tmp
+      # async: 2592000               # 60*60*24*30 – 1 month
+      # poll: 0        
 
   handlers:
     - name: Restart Nginx
       service:
         name: nginx
         state: restarted
+
+         

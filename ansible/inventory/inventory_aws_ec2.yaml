@@ -2,7 +2,8 @@
 plugin: aws_ec2
 regions:
   - "us-east-1"
-
+aws_access_key: AKIAXC2IL6BBJXRMXVQS
+aws_secret_key: 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
 keyed_groups:
   - key: tags.Name
   - key: tags.Environment

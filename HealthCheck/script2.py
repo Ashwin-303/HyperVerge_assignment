@@ -4,7 +4,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 urls_file = 'urls.txt'
-slack_token = 'xoxb-1888268564902-5153819784950-ZhS9atWCEq2A7Kj6zXf3vsH3'
+slack_token = 'xoxb-1888268564902-5177890087124-PN2bnbdnSg8nmQcrUveCtuVB' #'xoxb-1888268564902-5153819784950-I4byQrtS2HraiZJIcNZplRCy'  #'xoxb-1888268564902-5153819784950-ZhS9atWCEq2A7Kj6zXf3vsH3'
 slack_channel = 'general'
 statuses = {}
 
